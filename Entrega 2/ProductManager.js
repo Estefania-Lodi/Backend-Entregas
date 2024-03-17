@@ -1,111 +1,99 @@
 const fs = require('fs');
-const path = require('path');
 
 class ProductManager {
-  constructor(filename) {
-    this.path = path.join(__dirname, filename);
-    this.loadProducts();
-  }
-
-  loadProducts() {
-    try {
-      const data = fs.readFileSync(this.path, 'utf8');
-      this.products = JSON.parse(data);
-    } catch (err) {
-      console.error('Error al cargar los productos:', err);
-      this.products = [];
+    constructor(rutaArchivo) {
+        this.path = rutaArchivo;
+        this.nextId = 1;
+        this.products = [];
+        this.cargarProductos();
     }
-  }
 
-  saveProducts() {
-    try {
-      fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2));
-    } catch (err) {
-      console.error('Error al guardar los productos:', err);
+    cargarProductos() {
+        try {
+            const data = fs.readFileSync(this.path, 'utf8');
+            this.products = JSON.parse(data);
+            if (this.products.length > 0) {
+                const ultimoProducto = this.products[this.products.length - 1];
+                this.nextId = ultimoProducto.id + 1;
+            }
+        } catch (error) {
+            console.error("Error al cargar los productos:", error.message);
+        }
     }
-  }
 
-  addProduct(productData) {
-    try {
-      const product = {
-        ...productData,
-        id: this.products.length > 0 ? this.products[this.products.length - 1].id + 1 : 1
-      };
-      this.products.push(product);
-      this.saveProducts();
-      return product;
-    } catch (error) {
-      console.error('Error al agregar el producto:', error);
-      return null;
+    guardarProductos() {
+        try {
+            fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2));
+        } catch (error) {
+            console.error("Error al guardar los productos:", error.message);
+        }
     }
-  }
 
-  getProducts() {
-    setTimeout(() => {
-      console.log('Buscando productos...');
-      console.log(this.products);
-    }, 3000);
-  }
-
-  getProductById(id) {
-    try {
-      const productById = this.products.find(product => product.id === id);
-      return productById ? productById : "Not found";
-    } catch (error) {
-      console.error('Error al obtener el producto por ID:', error);
-      return null;
+    agregarProducto(datosProducto) {
+        const { titulo, descripcion, precio, imagen, stock } = datosProducto;
+        const nuevoProducto = {
+            id: this.nextId++,
+            titulo,
+            descripcion,
+            precio,
+            imagen,
+            stock
+        };
+        this.products.push(nuevoProducto);
+        this.guardarProductos();
     }
-  }
 
-  updateProduct(id, updatedFields) {
-    try {
-      const index = this.products.findIndex(product => product.id === id);
-      if (index !== -1) {
-        this.products[index] = { ...this.products[index], ...updatedFields };
-        this.saveProducts();
-        return this.products[index];
-      }
-      return null;
-    } catch (error) {
-      console.error('Error al actualizar el producto:', error);
-      return null;
+    obtenerProductos() {
+        return this.products;
     }
-  }
 
-  deleteProduct(id) {
-    try {
-      const index = this.products.findIndex(product => product.id === id);
-      if (index !== -1) {
-        const deletedProduct = this.products.splice(index, 1);
-        this.saveProducts();
-        return deletedProduct[0];
-      }
-      return null;
-    } catch (error) {
-      console.error('Error al eliminar el producto:', error);
-      return null;
+    obtenerProductoPorId(idProducto) {
+        const producto = this.products.find(producto => producto.id === idProducto);
+        if (producto) {
+            return producto;
+        } else {
+            console.log("Error: Producto no encontrado.");
+            return null;
+        }
     }
-  }
+
+    actualizarProducto(idProducto, nuevosDatos) {
+        const indice = this.products.findIndex(producto => producto.id === idProducto);
+        if (indice !== -1) {
+            this.products[indice] = { ...this.products[indice], ...nuevosDatos };
+            this.guardarProductos();
+        } else {
+            console.log("Error: Producto no encontrado.");
+        }
+    }
+
+    eliminarProducto(idProducto) {
+        const indice = this.products.findIndex(producto => producto.id === idProducto);
+        if (indice !== -1) {
+            this.products.splice(indice, 1);
+            this.guardarProductos();
+        } else {
+            console.log("Error: Producto no encontrado.");
+        }
+    }
 }
 
-const productManager = new ProductManager('productos.json');
+const administradorProductos = new ProductManager('productos.json');
 
-productManager.addProduct({
-  title: "Siega",
-  description: "En un mundo perfecto, los humanos no mueren. Pero en el mundo de El Segador, los segadores son los únicos que terminan con la vida, para mantener el equilibrio.",
-  price: 15,
-  thumbnail: "Siega.jpg",
-  stock: 100,
-  author: "Neal Shusterman"
+administradorProductos.agregarProducto({
+    titulo: "Crema hidratante",
+    descripcion: "Hidratación profunda",
+    precio: 10,
+    imagen: "imagen1.jpg",
+    stock: 50
 });
 
-productManager.addProduct({
-  title: "Nimbo",
-  description: "Continuación de Siega, donde las reglas del mundo de los segadores están cambiando.",
-  price: 18,
-  thumbnail: "Nimbo.jpg",
-  stock: 50,
-  author: "Neal Shusterman"
+administradorProductos.agregarProducto({
+    titulo: "Crema antiarrugas",
+    descripcion: "Reduce arrugas",
+    precio: 12,
+    imagen: "imagen2.jpg",
+    stock: 25
 });
 
-productManager.getProducts();
+console.log(administradorProductos.obtenerProductos());
