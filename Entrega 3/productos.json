@@ -1,0 +1,26 @@
+[
+    {
+      "id": 1,
+      "titulo": "Crema hidratante",
+      "descripcion": "Hidratación profunda",
+      "precio": 10,
+      "imagen": "imagen1.jpg",
+      "stock": 50
+    },
+    {
+      "id": 2,
+      "titulo": "Crema antiarrugas",
+      "descripcion": "Reduce arrugas",
+      "precio": 12,
+      "imagen": "imagen2.jpg",
+      "stock": 25
+    },
+    {
+      "id": 3,
+      "titulo": "Protector solar",
+      "descripcion": "Protección solar",
+      "precio": 15,
+      "imagen": "imagen3.jpg",
+      "stock": 40
+    }
+]
