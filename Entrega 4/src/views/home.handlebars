@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fler Estudio</title>
+    <link rel="stylesheet" href="/home.css">
+</head>
+<body>
+    <h1 class="container">FlerEstudio</h1>
+    <p class="container">Bienvenido a FlerEstudio.</p>
+
+    <div class="productos-container">
+        <h2>Productos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Imagen</th>
+                    <th>Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each productos}}
+                <tr>
+                    <td>{{this.id}}</td>
+                    <td>{{this.titulo}}</td>
+                    <td>{{this.descripcion}}</td>
+                    <td>${{this.precio}}</td>
+                    <td><img src="{{this.imagen}}" alt="{{this.titulo}}"></td>
+                    <td>{{this.stock}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container">
+        <p><a href="http://localhost:8080/realtimeproducts">Agregar productos</a></p>
+    </div>
+</body>
+</html>

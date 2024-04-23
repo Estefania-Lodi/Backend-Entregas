@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlerEstudio - Agregar Producto</title>
+    <link rel="stylesheet" href="/realTimeProducts.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Agregar Producto</h1>
+
+        <div class="form-container">
+            <form id="product-form">
+                <label for="id">ID:</label>
+                <input type="number" id="id" name="id" min="1" title="Solo números positivos" required>
+                <label for="titulo">Título:</label>
+                <input type="text" id="titulo" name="titulo" pattern="[A-Za-z]+" title="Solo letras" required>
+                <label for="descripcion">Descripción:</label>
+                <input type="text" id="descripcion" name="descripcion" pattern="[A-Za-z]+" title="Solo letras"
+                    required>
+                <label for="precio">Precio:</label>
+                <input type="number" id="precio" name="precio" min="1" title="Solo números positivos mayores que 1" required>
+                <label for="stock">Stock:</label>
+                <input type="number" id="stock" name="stock" min="0" title="Solo números positivos" required>
+                <button type="submit">Agregar</button>
+                <div id="error-messages">
+                    <p class="error-message" id="id-error-message"></p>
+                    <p class="error-message" id="titulo-error-message"></p>
+                    <p class="error-message" id="descripcion-error-message"></p>
+                    <p class="error-message" id="precio-error-message"></p>
+                    <p class="error-message" id="stock-error-message"></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <a href="http://localhost:8080/home" id="home-link">Volver al inicio</a>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/realTimeProducts.js"></script>
+</body>
+
+</html>
